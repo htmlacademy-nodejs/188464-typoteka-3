@@ -1,0 +1,32 @@
+{
+  "name": "188464-typoteka-3",
+  "version": "1.0.0",
+  "description": "Типотека",
+  "main": "./src/service/service.js",
+  "scripts": {
+    "start": "node ./src/service/service.js",
+    "test": "npm run eslint",
+    "eslint": "eslint --fix --ext .js src/"
+  },
+  "pre-commit": [
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/star4beam/188464-typoteka-3.git"
+  },
+  "author": "Новиков Михаил",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/star4beam/188464-typoteka-3/issues"
+  },
+  "homepage": "https://github.com/star4beam/188464-typoteka-3#readme",
+  "devDependencies": {
+    "eslint": "7.1.0",
+    "eslint-config-htmlacademy": "0.5.2",
+    "pre-commit": "1.2.2"
+  },
+  "dependencies": {
+    "commander": "5.1.0"
+  }
+}
