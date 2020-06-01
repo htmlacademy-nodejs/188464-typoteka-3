@@ -2,6 +2,7 @@
 
 const fs = require(`fs`);
 const path = require(`path`);
+const chalk = require(`chalk`);
 const {format} = require(`date-fns`);
 const {shuffle, getRandomInt, getRandomItem} = require(`./utils`);
 const FILE_NAME = `mocks.json`;
@@ -61,7 +62,7 @@ const makeAnnounceAndFullText = () => {
   return {announce, fullText};
 };
 
-const makeCategory = () => shuffle(categories, getRandomInt(1, categories.length - 1));
+const makeCategory = () => shuffle(categories, getRandomInt(1, categories.length));
 
 const getCreatedDateRange = () => {
   const date = new Date();
@@ -94,10 +95,10 @@ const generateMock = (count) => {
   const mockPath = path.resolve(__dirname, `../../${FILE_NAME}`);
   fs.writeFile(mockPath, JSON.stringify(mock, null, 4), (err) => {
     if (err) {
-      console.error(`Can't write data to file ${FILE_NAME}`);
+      console.error(chalk.red(`Can't write data to file ${FILE_NAME}`));
       process.exit(1);
     }
-    console.info(`${FILE_NAME} created`);
+    console.info(chalk.green(`${FILE_NAME} created`));
   });
 };
 
@@ -106,10 +107,10 @@ const generate = (value) => {
   const parsedValue = Number.parseInt(value, 10);
   const count = parsedValue || MIN_MOCK_COUNT;
   if (count > MAX_MOCK_COUNT) {
-    console.error(`No more than ${MAX_MOCK_COUNT} ads`);
+    console.error(chalk.red(`No more than ${MAX_MOCK_COUNT} ads`));
     process.exit(1);
   } else if (count < 0) {
-    console.error(`Count must be positive integer`);
+    console.error(chalk.red(`Count must be positive integer`));
     process.exit(1);
   }
   generateMock(count);
