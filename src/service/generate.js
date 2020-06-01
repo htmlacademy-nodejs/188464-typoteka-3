@@ -9,6 +9,8 @@ const FILE_NAME = `mocks.json`;
 const MIN_ANNOUNCE_COUNT = 1;
 const MAX_ANNOUNCE_COUNT = 5;
 
+const MIN_FULL_TEXT_COUNT = 1;
+
 const MIN_MOCK_COUNT = 1;
 const MAX_MOCK_COUNT = 1000;
 
@@ -51,14 +53,15 @@ const categories = [`Деревья`, `За жизнь`, `Без рамки`, `�
 const makeTitle = () => getRandomItem(titles);
 
 const makeAnnounceAndFullText = () => {
-  const shuffledSentences = shuffle(sentences);
   const announcesCount = getRandomInt(MIN_ANNOUNCE_COUNT, MAX_ANNOUNCE_COUNT);
-  const announceSentences = shuffledSentences.slice(0, announcesCount);
-  const fullTextSentences = shuffledSentences.slice(announcesCount, getRandomInt(announcesCount, shuffledSentences.length));
-  return [announceSentences.join(` `), fullTextSentences.join(` `)];
+  const fullTextCount = getRandomInt(MIN_FULL_TEXT_COUNT, sentences.length - announcesCount);
+  const shuffledSentences = shuffle(sentences, announcesCount + fullTextCount);
+  const announce = shuffledSentences.slice(0, announcesCount).join(` `);
+  const fullText = shuffledSentences.slice(announcesCount).join(` `);
+  return {announce, fullText};
 };
 
-const makeCategory = () => shuffle(categories).slice(0, getRandomInt(1, categories.length - 1));
+const makeCategory = () => shuffle(categories, getRandomInt(1, categories.length - 1));
 
 const getCreatedDateRange = () => {
   const date = new Date();
@@ -75,7 +78,7 @@ const makeCreatedDate = ({then, now}) => {
 };
 
 const generateOne = (createdDateRange) => {
-  const [announce, fullText] = makeAnnounceAndFullText();
+  const {announce, fullText} = makeAnnounceAndFullText();
   return {
     title: makeTitle(),
     announce,
