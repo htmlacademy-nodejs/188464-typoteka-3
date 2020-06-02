@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`);
+const fsPromises = require(`fs`).promises;
 const path = require(`path`);
 const chalk = require(`chalk`);
 const {format} = require(`date-fns`);
@@ -89,17 +89,17 @@ const generateOne = (createdDateRange) => {
   };
 };
 
-const generateMock = (count) => {
+const generateMock = async (count) => {
   const createdDateRange = getCreatedDateRange();
   const mock = [...new Array(count)].map(() => generateOne(createdDateRange));
   const mockPath = path.resolve(__dirname, `../../${FILE_NAME}`);
-  fs.writeFile(mockPath, JSON.stringify(mock, null, 4), (err) => {
-    if (err) {
-      console.error(chalk.red(`Can't write data to file ${FILE_NAME}`));
-      process.exit(1);
-    }
-    console.info(chalk.green(`${FILE_NAME} created`));
-  });
+  try {
+    await fsPromises.writeFile(mockPath, JSON.stringify(mock, null, 4));
+  } catch (err) {
+    console.error(`Can't write data to file ${FILE_NAME}`);
+    process.exit(1);
+  }
+  console.info(chalk.green(`${FILE_NAME} created`));
 };
 
 
