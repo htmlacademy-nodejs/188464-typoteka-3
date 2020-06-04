@@ -5,7 +5,7 @@ const path = require(`path`);
 const chalk = require(`chalk`);
 const {format} = require(`date-fns`);
 const {shuffle, getRandomInt, getRandomItem} = require(`./utils`);
-const FILE_NAME = `mocks.json`;
+const {MOCK_PATH, MOCK_FILE_NAME} = require(`./constants`);
 const DATA_PATH = path.resolve(__dirname, `../../data`);
 const SENTENCES_FILE = path.resolve(DATA_PATH, `sentences.txt`);
 const TITLES_FILE = path.resolve(DATA_PATH, `titles.txt`);
@@ -84,14 +84,13 @@ const generateMock = async (count) => {
   const mockData = await getData();
   const createdDateRange = getCreatedDateRange();
   const mock = [...new Array(count)].map(() => generateOne(mockData, createdDateRange));
-  const mockPath = path.resolve(__dirname, `../../${FILE_NAME}`);
   try {
-    await fsPromises.writeFile(mockPath, JSON.stringify(mock, null, 4));
+    await fsPromises.writeFile(MOCK_PATH, JSON.stringify(mock, null, 4));
   } catch (err) {
-    console.error(`Can't write data to file ${FILE_NAME}`);
+    console.error(`Can't write data to file ${MOCK_FILE_NAME}`);
     process.exit(1);
   }
-  console.info(chalk.green(`${FILE_NAME} created`));
+  console.info(chalk.green(`${MOCK_FILE_NAME} created`));
 };
 
 
