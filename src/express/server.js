@@ -3,7 +3,7 @@
 const express = require(`express`);
 const app = express();
 const PORT = 8080;
-const {rootRouter} = require(`./routes`);
+const {rootRouter} = require(`./routes/root`);
 
 app.use(rootRouter);
 
