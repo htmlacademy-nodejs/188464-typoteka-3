@@ -1,0 +1,19 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width,initial-scale=1')
+    block description
+      meta(name='Description' content='Личный блог Типотека')
+    block title
+      title Типотека
+    link(rel='preload' href='./fonts/Inter-Regular.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='./fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='./fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
+    base(href='/')
+    link(rel='stylesheet' href='css/style.min.css')
+  block content
+  block footer
+    include footer.pug
+  script(src='js/vendor.js')
+  script(src='js/main.js')
