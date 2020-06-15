@@ -1,9 +1,10 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {page} = require(`../utils`);
 
 const searchRouter = new Router();
-searchRouter.get(`/`, page);
+searchRouter.get(`/`, (req, res) => {
+  res.render(`search`);
+});
 
 module.exports = {searchRouter};

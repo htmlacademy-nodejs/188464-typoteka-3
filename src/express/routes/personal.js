@@ -1,10 +1,13 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {page} = require(`../utils`);
 
 const personalRouter = new Router();
-personalRouter.get(`/`, page);
-personalRouter.get(`/comments`, page);
+personalRouter.get(`/`, (req, res) => {
+  res.render(`my`);
+});
+personalRouter.get(`/comments`, (req, res) => {
+  res.render(`comments`);
+});
 
 module.exports = {personalRouter};
