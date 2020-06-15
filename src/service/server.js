@@ -1,65 +1,27 @@
 'use strict';
-const http = require(`http`);
+const express = require(`express`);
 const fsPromises = require(`fs`).promises;
-const HttpStatus = require(`http-status-codes`);
 const {MOCK_PATH} = require(`./constants`);
 
 const DEFAULT_PORT = 3000;
 
-const getMockTitles = async () => {
-  const json = await fsPromises.readFile(MOCK_PATH, {encoding: `utf-8`});
-  return JSON.parse(json).map(({title}) => title);
-};
-
-const renderTitlesList = async () => {
-  const titles = await getMockTitles();
-  return `<h2>Заголовки:</h2><ul>${titles.map((title) => `<li>${title}</li>`).join(``)}</ul>`;
-};
-
-const renderPage = (content) => {
-  return `<html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title>Document</title>
-    </head>
-    <body>
-    ${content}
-    </body>
-</html>`;
-};
-
-const renderTitlesPage = async () => {
-  const titlesList = await renderTitlesList();
-  return renderPage(titlesList);
-};
-
-const onClientConnect = async (request, response) => {
+const postsRouter = new express.Router();
+postsRouter.get(`/`, async (req, res) => {
+  let mocks;
   try {
-    if (request.url === `/`) {
-      const page = await renderTitlesPage();
-      response.writeHead(HttpStatus.OK, {
-        'Content-Type': `text/html; charset=utf-8`,
-      });
-      response.end(page);
-    } else {
-      throw Error(`Not Found`);
-    }
+    mocks = await fsPromises.readFile(MOCK_PATH, {encoding: `utf-8`}).then((data) => JSON.parse(data));
   } catch (err) {
-    response.writeHead(HttpStatus.NOT_FOUND, {
-      'Content-Type': `text/html; charset=utf-8`,
-    });
-    response.end(renderPage(HttpStatus.getStatusText(HttpStatus.NOT_FOUND)));
+    res.json([]);
+    return;
   }
-};
+  res.json(mocks);
+})
+
+const app = express();
+app.use(express.json());
+app.use(`/posts`, postsRouter);
 
 exports.start = (port) => {
   port = Number.isNaN(port) ? DEFAULT_PORT : port;
-  const httpServer = http.createServer(onClientConnect);
-  httpServer.listen(port, (err) => {
-    if (err) {
-      return console.error(`http-server creation error.`, err);
-    }
-
-    return console.info(`listening on ${port}.`);
-  });
+  app.listen(port, () => console.info(`listening on ${port}.`));
 };
