@@ -22,8 +22,11 @@ const shuffle = (array, length = array.length) => {
   return resultArray.slice(resultArray.length - length);
 };
 
+const getRandomItems = (arr) => shuffle(arr, getRandomInt(1, arr.length));
+
 module.exports = {
   getRandomInt,
   getRandomItem,
+  getRandomItems,
   shuffle,
 };
