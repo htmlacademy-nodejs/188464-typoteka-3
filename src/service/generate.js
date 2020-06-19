@@ -3,9 +3,7 @@
 const fsPromises = require(`fs`).promises;
 const path = require(`path`);
 const chalk = require(`chalk`);
-const format = require(`date-fns/format`);
-const {nanoid} = require(`nanoid`);
-const {shuffle, getRandomInt, getRandomItem, getRandomItems} = require(`./utils`);
+const {shuffle, getRandomInt, getRandomItem, getRandomItems, generateId, formatDate} = require(`./utils`);
 const {MOCK_PATH, MOCK_FILE_NAME} = require(`./constants`);
 const DATA_PATH = path.resolve(__dirname, `../../data`);
 const SENTENCES_FILE = path.resolve(DATA_PATH, `sentences.txt`);
@@ -31,6 +29,7 @@ const getDataFromFile = async (file) => {
   }
   return data.split(`\n`);
 };
+
 
 const getData = async () => {
   const [titles, categories, sentences, comments] = await Promise.all([
@@ -67,11 +66,11 @@ const getCreatedDateRange = () => {
 
 const makeCreatedDate = ({then, now}) => {
   const randomDate = new Date(getRandomInt(then, now));
-  return format(randomDate, `yyyy-MM-dd HH:mm:ss`);
+  return formatDate(randomDate);
 };
 
 const makeComments = (comments) => getRandomItems(comments).map((comment) => ({
-  id: nanoid(6),
+  id: generateId(),
   text: comment,
 }));
 
@@ -84,7 +83,7 @@ const generateOne = (mockData, createdDateRange) => {
     fullText,
     createdDate: makeCreatedDate(createdDateRange),
     category: getRandomItems(categories),
-    id: nanoid(6),
+    id: generateId(),
     comments: makeComments(comments),
   };
 };

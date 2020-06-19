@@ -1,25 +1,36 @@
 'use strict';
+
 const express = require(`express`);
-const fsPromises = require(`fs`).promises;
-const {MOCK_PATH} = require(`./constants`);
+const {apiRouter} = require(`./routes/api`);
+const {postsRouter} = require(`./routes/posts`);
+const HttpStatus = require(`http-status-codes`);
+const {Errors} = require(`./mockUtils`);
 
 const DEFAULT_PORT = 3000;
 
-const postsRouter = new express.Router();
-postsRouter.get(`/`, async (req, res) => {
-  let mocks;
-  try {
-    mocks = JSON.parse(await fsPromises.readFile(MOCK_PATH, {encoding: `utf-8`}));
-  } catch (err) {
-    res.json([]);
-    return;
-  }
-  res.json(mocks);
-});
 
 const app = express();
 app.use(express.json());
 app.use(`/posts`, postsRouter);
+app.use(`/api`, apiRouter);
+
+app.use(function (err, req, res, next) {
+  if (err) {
+    console.error(err.message);
+    switch (err.message) {
+      case Errors.MOCK_PARAMS_ERROR:
+        res.status(HttpStatus.BAD_REQUEST);
+        break;
+      case Errors.ARTICLE_NOT_FOUND:
+        res.status(HttpStatus.NOT_FOUND);
+        break;
+      default:
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    res.send(``);
+  }
+  next();
+});
 
 exports.start = (port) => {
   port = Number.isNaN(port) ? DEFAULT_PORT : port;

@@ -1,4 +1,5 @@
 'use strict';
+
 const cli = require(`sywac`);
 const chalk = require(`chalk`);
 const {version} = require(`../../package`);
