@@ -88,6 +88,9 @@ const getCommentsByArticleId = async (articleId) => {
 };
 
 const addCommentToArticle = async (articleId, {text}) => {
+  if (!text) {
+    throw new Error(Errors.MOCK_PARAMS_ERROR);
+  }
   const article = await getArticleById(articleId);
   const id = generateId();
   article.comments.set(id, {id, text});

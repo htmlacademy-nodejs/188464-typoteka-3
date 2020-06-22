@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const HttpStatus = require(`http-status-codes`);
-const {getCommentsByArticleId, addCommentToArticle, deleteCommentById} = require(`../../../mockUtils`);
+const {getCommentsByArticleId, addCommentToArticle, deleteCommentById} = require(`../../../mock-utils`);
 
 const commentsRouter = new Router();
 

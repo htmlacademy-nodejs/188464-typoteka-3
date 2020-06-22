@@ -4,7 +4,7 @@ const express = require(`express`);
 const {apiRouter} = require(`./routes/api`);
 const {postsRouter} = require(`./routes/posts`);
 const HttpStatus = require(`http-status-codes`);
-const {Errors} = require(`./mockUtils`);
+const {Errors} = require(`./mock-utils`);
 
 const DEFAULT_PORT = 3000;
 

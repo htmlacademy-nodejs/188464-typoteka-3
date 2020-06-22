@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {getArticles} = require(`../mockUtils`);
+const {getArticles} = require(`../mock-utils`);
 const postsRouter = new Router();
 postsRouter.get(`/`, async (req, res, next) => {
   try {

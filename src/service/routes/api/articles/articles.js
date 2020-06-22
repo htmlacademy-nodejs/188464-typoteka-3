@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const HttpStatus = require(`http-status-codes`);
-const {getArticlesShort, getArticleById, addArticle, editArticle, deleteArticleById} = require(`../../../mockUtils`);
+const {getArticlesShort, getArticleById, addArticle, editArticle, deleteArticleById} = require(`../../../mock-utils`);
 
 const articlesRouter = new Router();
 

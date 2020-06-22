@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {searchArticlesByTitle} = require(`../../mockUtils`);
+const {searchArticlesByTitle} = require(`../../mock-utils`);
 
 const searchRouter = new Router();
 
