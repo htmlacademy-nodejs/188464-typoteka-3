@@ -1,5 +1,8 @@
 'use strict';
 
+const {nanoid} = require(`nanoid`);
+const format = require(`date-fns/format`);
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -22,8 +25,17 @@ const shuffle = (array, length = array.length) => {
   return resultArray.slice(resultArray.length - length);
 };
 
+const getRandomItems = (arr) => shuffle(arr, getRandomInt(1, arr.length));
+
+const generateId = () => nanoid(6);
+
+const formatDate = (date) => format(date, `yyyy-MM-dd HH:mm:ss`);
+
 module.exports = {
   getRandomInt,
   getRandomItem,
+  getRandomItems,
   shuffle,
+  generateId,
+  formatDate,
 };

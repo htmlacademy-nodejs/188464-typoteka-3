@@ -3,13 +3,13 @@
 const fsPromises = require(`fs`).promises;
 const path = require(`path`);
 const chalk = require(`chalk`);
-const {format} = require(`date-fns`);
-const {shuffle, getRandomInt, getRandomItem} = require(`./utils`);
+const {shuffle, getRandomInt, getRandomItem, getRandomItems, generateId, formatDate} = require(`./utils`);
 const {MOCK_PATH, MOCK_FILE_NAME} = require(`./constants`);
 const DATA_PATH = path.resolve(__dirname, `../../data`);
 const SENTENCES_FILE = path.resolve(DATA_PATH, `sentences.txt`);
 const TITLES_FILE = path.resolve(DATA_PATH, `titles.txt`);
 const CATEGORIES_FILE = path.resolve(DATA_PATH, `categories.txt`);
+const COMMENTS_FILE = path.resolve(DATA_PATH, `comments.txt`);
 
 const MIN_ANNOUNCE_COUNT = 1;
 const MAX_ANNOUNCE_COUNT = 5;
@@ -30,14 +30,16 @@ const getDataFromFile = async (file) => {
   return data.split(`\n`);
 };
 
+
 const getData = async () => {
-  const [titles, categories, sentences] = await Promise.all([
+  const [titles, categories, sentences, comments] = await Promise.all([
     getDataFromFile(TITLES_FILE),
     getDataFromFile(CATEGORIES_FILE),
-    getDataFromFile(SENTENCES_FILE)
+    getDataFromFile(SENTENCES_FILE),
+    getDataFromFile(COMMENTS_FILE)
   ]);
   return {
-    titles, categories, sentences
+    titles, categories, sentences, comments
   };
 };
 
@@ -52,7 +54,6 @@ const makeAnnounceAndFullText = (sentences) => {
   return {announce, fullText};
 };
 
-const makeCategory = (categories) => shuffle(categories, getRandomInt(1, categories.length));
 
 const getCreatedDateRange = () => {
   const date = new Date();
@@ -65,18 +66,25 @@ const getCreatedDateRange = () => {
 
 const makeCreatedDate = ({then, now}) => {
   const randomDate = new Date(getRandomInt(then, now));
-  return format(randomDate, `yyyy-MM-dd HH:mm:ss`);
+  return formatDate(randomDate);
 };
 
+const makeComments = (comments) => getRandomItems(comments).map((comment) => ({
+  id: generateId(),
+  text: comment,
+}));
+
 const generateOne = (mockData, createdDateRange) => {
-  const {titles, categories, sentences} = mockData;
+  const {titles, categories, sentences, comments} = mockData;
   const {announce, fullText} = makeAnnounceAndFullText(sentences);
   return {
     title: makeTitle(titles),
     announce,
     fullText,
     createdDate: makeCreatedDate(createdDateRange),
-    category: makeCategory(categories),
+    category: getRandomItems(categories),
+    id: generateId(),
+    comments: makeComments(comments),
   };
 };
 
